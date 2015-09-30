@@ -1,0 +1,38 @@
+caer gord == -1   
+de la ptm == 2   
+de la put mar == 2
+met cabez == -2
+met flor == -1  
+ni fu ni fa == -1  
+ni michi == -1  
+ni mierd == -2  
+a la tel == 1  
+com canch == 2
+de romp y raj == 2  
+la hiz lind == 2  
+tir cañ == 1
+a la prep == -1  
+caid del palt == -1    
+de la pat == -2  
+entre pisc y nazc == -1
+hast el pern == -2   
+hast la coronill == -2
+hast el copet == -2  
+hij de papi == -1
+hij de mami == -1
+hij de mam == -1
+hij de pap == -1
+import un comin == -2  
+import un pepin == -2  
+man rot == -1
+met la pat == -1
+cabez de poll == -1
+por las pur == -1  
+revent a algui == -1
+sac la mugr == -2  
+sac el ancho == -2  
+sac la vuelt == -1
+sac larg == -1
+se le chorre el hel == -1
+tir la per == -1  
+cañ mons == -1  

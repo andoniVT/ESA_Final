@@ -1,0 +1,22 @@
+no pued == -1  
+no lo pued == -1
+no se pued == -1  
+acas quier == -1
+no es just == -1 
+que pas == -1  
+nad de nad == -1
+nunc puedo == -1   
+no es posibl == -1
+ya no == -1  
+ni mod == -1  
+de primer == 1
+val la pen == 1
+lo maxim == 2  
+no aparec == -1  
+no carga == -1 
+no pas == -1  
+por que == -1 
+bast ya == -1  
+se corta == -1  
+no pas nad == -2
+en las buen y en las mal == 1
