@@ -7,11 +7,11 @@ Created on 15/11/2014
 '''
 
 import re 
-import Test3.settings as settings
-import Test3.corpus as corpus
-from Test3.term import Term
-from Test3.manager_rule import Manager , Pattern
-import Test3.commentPreprocessor as CP 
+import Test.settings as settings
+import Test.corpus as corpus
+from Test.term import Term
+from Test.manager_rule import Manager , Pattern
+import Test.commentPreprocessor as CP 
 
 class ParameterText(object):
     def __init__(self):

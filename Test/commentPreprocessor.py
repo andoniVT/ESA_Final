@@ -9,9 +9,9 @@ Created on 13/11/2014
 import re
 import unicodedata
 from unicodedata import normalize
-from Test3.split import separar
+from Test.split import separar
 import snowballstemmer
-from Test3.settings import stop_words
+from Test.settings import stop_words
 import string
 stopWordFile = stop_words
 

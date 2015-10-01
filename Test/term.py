@@ -6,7 +6,7 @@ Created on 15/11/2014
 @author: andoni
 '''
 
-import Test3.settings as settings 
+import Test.settings as settings 
 
 class Term(object):
     

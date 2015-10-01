@@ -6,7 +6,7 @@ Created on 15/11/2014
 @author: andoni
 '''
 
-from Test3.parameter_text import ParameterText
+from Test.parameter_text import ParameterText
 
 class Classifier(object):
     ''' Clase encargada de clasificar un comentario como positivo, negativo o neutro '''

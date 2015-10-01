@@ -4,7 +4,7 @@ Created on 14/8/2015
 @author: ucsp
 '''
  
-from Test4.classifier import Classifier
+from Test.classifier import Classifier
 
 
 class Unsupervised(object):

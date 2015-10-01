@@ -8,7 +8,7 @@ Created on 26/10/2014
 '''
 import re
 from itertools import groupby
-from Test3.settings import big_text
+from Test.settings import big_text
 def viterbi_segment(text):
     probs, lasts = [1.0], [0]
     for i in range(1, len(text) + 1):
