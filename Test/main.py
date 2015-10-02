@@ -79,8 +79,15 @@ class Manager(object):
             write_data_to_disk(fileClassifiers[i], fClass)
     
     def test(self, comments, type):
+        vectorizer = load_data_from_disk(simpleVectorizer)
+        transformer = load_data_from_disk(tfidfVectorizer)
+        model = VM()
+        model.set_models(vectorizer, transformer)
+                        
         if type == 1:
-            return self.__testSVM(comments)
+            return self.__testSVM(comments, model)
+                        
+        '''    
         elif type == 2:
             return self.__testNB(comments)
         elif type == 3:
@@ -89,9 +96,13 @@ class Manager(object):
             return self.__testDT(comments)
         elif type == 5:
             return self.__testUnsup(comments)
+        '''
     
-    def __testSVM(self, comments):
-        pass
+    def __testSVM(self, comments, model):
+        for i in comments.items():
+                comentario = i[0]
+                for j in i[1].items():
+                    print j        
     
     def __testNB(self, comments):
         pass
@@ -114,6 +125,28 @@ if __name__ == '__main__':
     comments = ["es muy bonito" , "no es muy bonito"]
     
     obj = Manager()
-    obj.trainClassifiers(corpusTrain2, 1)
+    #obj.trainClassifiers(corpusTrain2, 1)
+    
+    #lista = {}
+    #lista["Jorge es muy bonito"] = 2
+    
+    
+    actores = {}
+    actores["Jorge"] = 0
+    actores["Andoni"] = 5
+    
+    actores2 = {}
+    actores2["Valverde"] = 1
+    actores2["Tohalino"] = 4
+    
+    comentarios = {}
+    comentarios["hola como estas"] =  actores
+    #comentarios["este es otro comentario"] = actores2
+    
+    
+    
+    obj.test(comentarios, 1)
+    
+    
     
     
