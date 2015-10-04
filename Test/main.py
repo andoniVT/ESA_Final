@@ -9,6 +9,9 @@ from Test.VectorModel import VectorModel as VM
 from Test.Utils import write_data_to_disk , load_data_from_disk , expand 
 from Test.Classifier import SupervisedClassifier as SC
 from Test.unsupervisedClassifier import Unsupervised
+from Test.segmentation import Segmentation
+from Test.commentPreprocessor import Comment_proccesor as CP
+from nltk.test.unit.test_classify import RESULTS
 
 simpleVectorizer = "Models/simpleVectorizer.pk1"
 tfidfModel = "Models/tfidfModel.pk1"
@@ -98,11 +101,45 @@ class Manager(object):
             return self.__testUnsup(comments)
         '''
     
-    def __testSVM(self, comments, model):
-        for i in comments.items():
-                comentario = i[0]
-                for j in i[1].items():
-                    print j        
+    def __testSVM(self, comment, model):
+        results  = []
+                
+        comentario = comment[0]
+        seg = Segmentation(comentario)
+        segmentos = seg.find_sentences()
+        entities = comment[1].items()
+                        
+        for j in segmentos:
+            proc = TextCleaner(j)
+            procesado = proc.get_processed_comment()
+            
+            vector = model.get_comment_tf_idf_vector([procesado])
+            supClass = load_data_from_disk(SVM)
+            classifier = SC()
+            classifier.set_classifier(supClass)
+            result = classifier.classify(vector)
+              
+            
+            polaridadSup =  result[0][0]
+            
+            for i in entities:                
+                if j.find(i[0])!=-1:
+                    value = (i[0] , polaridadSup)
+                    results.append(value)
+        
+        return results 
+                    
+            
+            
+             
+            
+            
+                         
+                
+                
+                
+                #for j in i[1].items():
+                #    print j[0]        
     
     def __testNB(self, comments):
         pass
@@ -131,21 +168,24 @@ if __name__ == '__main__':
     #lista["Jorge es muy bonito"] = 2
     
     
+ 
+    
     actores = {}
-    actores["Jorge"] = 0
-    actores["Andoni"] = 5
+    actores["Barcelona"] = 3
+    actores["Madrid"] = 65
     
-    actores2 = {}
-    actores2["Valverde"] = 1
-    actores2["Tohalino"] = 4
-    
-    comentarios = {}
-    comentarios["hola como estas"] =  actores
+    comentario = {}
+    #comentario["El Barcelona gana un titulo y es una temporada mediocre, el Madrid gana una copa y es un temporadon!!"] =  actores
     #comentarios["este es otro comentario"] = actores2
+    comentario = ("El Barcelona gana un titulo y es una temporada mediocre, el Madrid gana una copa y es un temporadon!!" ,  actores)
+    
+    
+    results = obj.test(comentario, 1)
+    for i in results:
+        print i 
     
     
     
-    obj.test(comentarios, 1)
     
     
     
