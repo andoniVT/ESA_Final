@@ -50,16 +50,6 @@ class Segmentation(object):
         return end 
     
     def find_sentences(self):
-        '''
-        especial_terminators = ["o" , "y" , "u"]
-        list_sentence = self.sentence.split()
-        sentence = ""
-        for i in list_sentence:
-            if i in especial_terminators:
-                i = i+i
-            sentence = sentence + i + " "
-        self.sentence = sentence  
-        '''        
         end = True
         sentences = []
         while end > -1:

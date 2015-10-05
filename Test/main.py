@@ -12,8 +12,6 @@ from Test.Utils import write_data_to_disk , load_data_from_disk , expand
 from Test.Classifier import SupervisedClassifier as SC
 from Test.unsupervisedClassifier import Unsupervised
 from Test.segmentation import Segmentation
-from Test.commentPreprocessor import Comment_proccesor as CP
-from nltk.test.unit.test_classify import RESULTS
 
 simpleVectorizer = "Models/simpleVectorizer.pk1"
 tfidfModel = "Models/tfidfModel.pk1"
@@ -50,7 +48,6 @@ class Manager(object):
         else:
             pass
         
-    
     def prepareModels(self, xml_file, type):
         comentarios = self.procesar(xml_file, type)
         train = []
@@ -93,7 +90,6 @@ class Manager(object):
         seg = Segmentation(comentario)
         segmentos = seg.find_sentences()
         entities = comment[1].items()
-        print segmentos
         
         if type == 1:
             return self.__testClassifier(segmentos, entities, model, SVM)                                    
@@ -125,9 +121,7 @@ class Manager(object):
                     value = (i[0] , polaridadSup)
                     results.append(value)        
         return results 
-                                                                                                             
-    
-    
+                                                                                                                 
     def __testUnsup(self, segmentos, entities):
         results = []
         for i in segmentos:                    
@@ -145,7 +139,6 @@ class Manager(object):
 
 if __name__ == '__main__':
     
-    comments = ["es muy bonito" , "no es muy bonito"]
     
     obj = Manager()    
     #obj.trainClassifiers(corpusTrain1, 1)
@@ -177,17 +170,15 @@ if __name__ == '__main__':
     actores3["Benzema"] = 35
     comentario3 = ("El mejor del F.C Barcelona en la final en mi opinión fue Pinto, el mejor del Real Madrid aunque no marcó fue Benzema, tiene mucha calidad.", actores3)
     
+    actores4 = {}
+    actores4["Madrid"] = 18
+    actores4["Gareth Bale"] = 23
+    actores4["Barça"] = 25
+    comentario4 = ("espectacular el Madrid y Gareth Bale.  2-1 y para casa los del Barça jajaja" , actores4)
     
     
-    results = obj.test(comentario3, 5)    
+    
+    results = obj.test(comentario4, 5)    
     for i in results:
         print i
-    
-     
-    
-    
-    
-    
-    
-    
     
