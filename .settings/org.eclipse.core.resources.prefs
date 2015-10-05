@@ -4,6 +4,7 @@ encoding//Test/Utils.py=utf-8
 encoding//Test/classifier.py=utf-8
 encoding//Test/commentPreprocessor.py=utf-8
 encoding//Test/corpus.py=utf-8
+encoding//Test/main.py=utf-8
 encoding//Test/manager_rule.py=utf-8
 encoding//Test/parameter_text.py=utf-8
 encoding//Test/segmentation.py=utf-8

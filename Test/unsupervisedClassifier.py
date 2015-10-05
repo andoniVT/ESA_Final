@@ -9,21 +9,18 @@ from Test.classifier import Classifier
 
 class Unsupervised(object):
     
-    def __init__(self, comments):
-        self.__comments = comments
+    def __init__(self, comment):
+        self.__comment = comment
         self.__obj = Classifier()
     
-    def classify(self):
-        result = []
-        for i in self.__comments:    
-            self.__obj.classify(i)
-            result.append(self.__obj.get_label())
-        return result 
+    def classify(self):                
+        self.__obj.classify(self.__comment)            
+        return self.__obj.get_label() 
 
 if __name__ == '__main__':
     
     comments = ["es muy bonito" , "no es muy bonito"]
-    obj = Unsupervised(comments)
+    obj = Unsupervised(comments[1])
     print obj.classify()
     
     

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 '''
 Created on 1/10/2015
 
@@ -81,78 +83,61 @@ class Manager(object):
             fClass = classifier.train()
             write_data_to_disk(fileClassifiers[i], fClass)
     
-    def test(self, comments, type):
+    def test(self, comment, type):
         vectorizer = load_data_from_disk(simpleVectorizer)
         transformer = load_data_from_disk(tfidfVectorizer)
         model = VM()
         model.set_models(vectorizer, transformer)
-                        
-        if type == 1:
-            return self.__testSVM(comments, model)
-                        
-        '''    
-        elif type == 2:
-            return self.__testNB(comments)
-        elif type == 3:
-            return self.__testME(comments)
-        elif type == 4:
-            return self.__testDT(comments)
-        elif type == 5:
-            return self.__testUnsup(comments)
-        '''
-    
-    def __testSVM(self, comment, model):
-        results  = []
-                
         comentario = comment[0]
         seg = Segmentation(comentario)
         segmentos = seg.find_sentences()
         entities = comment[1].items()
-                        
+        print segmentos
+        
+        if type == 1:
+            return self.__testClassifier(segmentos, entities, model, SVM)                                    
+        elif type == 2:
+            return self.__testClassifier(segmentos, entities, model, NB)
+        elif type == 3:
+            return self.__testClassifier(segmentos, entities, model, ME)
+        elif type == 4:
+            return self.__testClassifier(segmentos, entities, model, DT)        
+        elif type == 5:
+            return self.__testUnsup(segmentos, entities)
+        
+    
+    def __testClassifier(self, segmentos, entities, model, fileClass):
+        results  = []                                                
         for j in segmentos:
             proc = TextCleaner(j)
             procesado = proc.get_processed_comment()
             
             vector = model.get_comment_tf_idf_vector([procesado])
-            supClass = load_data_from_disk(SVM)
+            supClass = load_data_from_disk(fileClass)
             classifier = SC()
             classifier.set_classifier(supClass)
             result = classifier.classify(vector)
-              
-            
-            polaridadSup =  result[0][0]
-            
+                      
+            polaridadSup =  result[0][0]            
             for i in entities:                
                 if j.find(i[0])!=-1:
                     value = (i[0] , polaridadSup)
-                    results.append(value)
-        
+                    results.append(value)        
         return results 
-                    
-            
-            
-             
-            
-            
-                         
-                
-                
-                
-                #for j in i[1].items():
-                #    print j[0]        
+                                                                                                             
     
-    def __testNB(self, comments):
-        pass
     
-    def __testME(self, comments):
-        pass
-    
-    def __testDT(self, comments):
-        pass
-    
-    def __testUnsup(self, comments):
-        obj = Unsupervised(comments)
-        return obj.classify()
+    def __testUnsup(self, segmentos, entities):
+        results = []
+        for i in segmentos:                    
+            obj = Unsupervised(i)
+            result = obj.classify()
+            
+            for j in entities:
+                if i.find(j[0])!=-1:
+                    value = (j[0], result)
+                    results.append(value)
+        return results 
     
     
 
@@ -164,11 +149,7 @@ if __name__ == '__main__':
     obj = Manager()
     #obj.trainClassifiers(corpusTrain2, 1)
     
-    #lista = {}
-    #lista["Jorge es muy bonito"] = 2
-    
-    
- 
+     
     
     actores = {}
     actores["Barcelona"] = 3
@@ -180,7 +161,22 @@ if __name__ == '__main__':
     comentario = ("El Barcelona gana un titulo y es una temporada mediocre, el Madrid gana una copa y es un temporadon!!" ,  actores)
     
     
-    results = obj.test(comentario, 1)
+    actores2 = {}
+    actores2["Real Madrid"] = 18
+    actores2["Barza"] = 65
+    comentario2 = ("Felicitaciones al Real Madrid, en las buenas y en las malas Visca Barza!", actores2)
+    
+    
+    actores3 = {}
+    actores3["F.C Barcelona"] = 18
+    actores3["Pinto"] = 23
+    actores3["Real Madrid"] = 25
+    actores3["Benzema"] = 35
+    comentario3 = ("El mejor del F.C Barcelona en la final en mi opinión fue Pinto, el mejor del Real Madrid aunque no marcó fue Benzema, tiene mucha calidad.", actores3)
+    
+    
+    
+    results = obj.test(comentario3, 5)    
     for i in results:
         print i 
     
