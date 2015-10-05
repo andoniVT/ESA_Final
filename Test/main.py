@@ -28,6 +28,7 @@ DT = "Classifiers/DT.pk1"
 corpusTrain1 = "Corpus/socialtv-tweets-train-tagged.xml"
 corpusTrain2 = "Corpus/stompol-tweets-train-tagged.xml"
 corpusTest1 = "Corpus/socialtv-tweets-train-tagged.xml"
+corpusFinal = "Corpus/corpus_final.xml"
 
 
 class Manager(object):
@@ -146,8 +147,10 @@ if __name__ == '__main__':
     
     comments = ["es muy bonito" , "no es muy bonito"]
     
-    obj = Manager()
+    obj = Manager()    
+    #obj.trainClassifiers(corpusTrain1, 1)
     #obj.trainClassifiers(corpusTrain2, 1)
+    #obj.trainClassifiers(corpusFinal, 1)
     
      
     
@@ -178,7 +181,9 @@ if __name__ == '__main__':
     
     results = obj.test(comentario3, 5)    
     for i in results:
-        print i 
+        print i
+    
+     
     
     
     
