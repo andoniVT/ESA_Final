@@ -8,7 +8,9 @@ Created on 18/3/2015
 from nltk import tokenize
 import itertools
 import re
-from __builtin__ import True
+import nltk.tokenize.punkt
+import pickle
+import codecs
 
 class Segmentation(object):
     
@@ -59,9 +61,48 @@ class Segmentation(object):
                 self.sentence = self.sentence[:end]
         sentences.append(self.sentence)
         sentences.reverse()
-        return sentences     
+        return sentences
+
+
+
+filename = "testTrain.txt"
+filename2 = "segmenterTrain.pk"
+
+
+class Segmentation2(object):
+    
+    def __init__(self):        
+        self.__text_segment_train = filename 
+        self.__train_segment = filename2
+    
+    
+    def train_punkt(self):
+        tokenizer = nltk.tokenize.punkt.PunktSentenceTokenizer()
+        text = codecs.open(self.__text_segment_train, "r", "utf8").read()
+        tokenizer.train(text)
+        out = open(self.__train_segment , "wb")
+        pickle.dump(tokenizer, out)
+        out.close()
+    
+    def segment_text(self, text):
+        #file2 = open("testTrain.pk", 'r')
+        file2 = open(self.__train_segment, 'r')
+        segmenter = pickle.Unpickler(file2).load()
+        segments = segmenter.tokenize(text)
+        return segments     
         
 if __name__ == '__main__':
+    
+    obj = Segmentation2()
+    #obj.train_punkt()
+    print obj.segment_text("Yo no he comentado el partido. pero HALA MADRID")
+    print obj.segment_text("Felicitaciones al Real Madrid. en las buenas y en las malas. Visca Barza!")
+    
+    
+    
+    
+    
+    '''
     
     #seg = Segmentation("Felicitaciones al Real Madrid, en las buenas y en las malas Visca Barza!")
     text_ = "Felicitaciones al Real Madrid, en las buenas y en las malas Visca Barza!"
@@ -101,5 +142,6 @@ if __name__ == '__main__':
     
     segmentos = seg.find_sentences()
     for i in segmentos:
-        print i 
+        print i
+    ''' 
     
