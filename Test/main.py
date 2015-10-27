@@ -11,7 +11,9 @@ from Test.VectorModel import VectorModel as VM
 from Test.Utils import write_data_to_disk , load_data_from_disk , expand 
 from Test.Classifier import SupervisedClassifier as SC
 from Test.unsupervisedClassifier import Unsupervised
-from Test.segmentation import Segmentation
+from Test.segmentation import Segmentation , Segmentation2
+
+
 
 simpleVectorizer = "Models/simpleVectorizer.pk1"
 tfidfModel = "Models/tfidfModel.pk1"
@@ -139,8 +141,10 @@ class Manager(object):
         model = VM()
         model.set_models(vectorizer, transformer)
         comentario = comment[0]
-        seg = Segmentation(comentario)
-        segmentos = seg.find_sentences()
+        #seg = Segmentation(comentario)
+        seg = Segmentation2()
+        #segmentos = seg.find_sentences()
+        segmentos = seg.segment_text(comentario)
         entities = comment[1].items()
         
         classSVM = ""
@@ -209,6 +213,7 @@ if __name__ == '__main__':
     
     
     obj = Manager()    
+
     #obj.trainClassifiers(corpusTrain1, 1)
     #obj.trainClassifiers(corpusTrain2, 1)
     #obj.trainClassifiers(corpusFinal, 1)
@@ -216,16 +221,20 @@ if __name__ == '__main__':
     
      
     '''
+=======
+    
+    #obj.trainClassifiers(corpusFinal, 1)  # Para entrenar los clasificadores
+    
+     
+    # pruebas
+>>>>>>> 6f8df8c70e91e56a51fbb260e0a77ade0dd16851
     actores = {}
     actores["Barcelona"] = 3
     actores["Madrid"] = 65
     
-    comentario = {}
-    #comentario["El Barcelona gana un titulo y es una temporada mediocre, el Madrid gana una copa y es un temporadon!!"] =  actores
-    #comentarios["este es otro comentario"] = actores2
+    comentario = {}    
     comentario = ("El Barcelona gana un titulo y es una temporada mediocre, el Madrid gana una copa y es un temporadon!!" ,  actores)
-    
-    
+        
     actores2 = {}
     actores2["Real Madrid"] = 18
     actores2["Barza"] = 65
@@ -247,8 +256,12 @@ if __name__ == '__main__':
     
     
     
-    results = obj.test(comentario4, 5)    
+    results = obj.test(comentario3, 4)    
     for i in results:
         print i
+<<<<<<< HEAD
     '''
+
+    
+
     
