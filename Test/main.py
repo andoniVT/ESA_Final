@@ -17,16 +17,29 @@ simpleVectorizer = "Models/simpleVectorizer.pk1"
 tfidfModel = "Models/tfidfModel.pk1"
 tfidfVectorizer = "Models/tfidfVectorizer.pk1"
 
+simpleVectorizerp = "Models/peruvian/simpleVectorizer.pk1"
+tfidfModelp = "Models/peruvian/tfidfModel.pk1"
+tfidfVectorizerp = "Models/peruvian/tfidfVectorizer.pk1"
+
+
 SVM = "Classifiers/SVM.pk1"
 NB = "Classifiers/NB.pk1"
 ME = "Classifiers/ME.pk1"
 DT = "Classifiers/DT.pk1"
+
+SVMp = "Classifiers/peruvian/SVM.pk1"
+NBp = "Classifiers/peruvian/NB.pk1"
+MEp = "Classifiers/peruvian/ME.pk1"
+DTp = "Classifiers/peruvian/DT.pk1"
+
+
 
 
 corpusTrain1 = "Corpus/socialtv-tweets-train-tagged.xml"
 corpusTrain2 = "Corpus/stompol-tweets-train-tagged.xml"
 corpusTest1 = "Corpus/socialtv-tweets-train-tagged.xml"
 corpusFinal = "Corpus/corpus_final.xml"
+corpusPeruvianTrain = "Corpus/peruvianTrain.xml"
 
 
 class Manager(object):
@@ -46,7 +59,15 @@ class Manager(object):
                         comentarios.append(value)
             return comentarios
         else:
-            pass
+            obj = Reader(file,4)
+            comentarios = []
+            for i in obj.read():
+                proc = TextCleaner(i[0])
+                value = [proc.get_processed_comment(), i[1]]
+                if value[0]!="None!":
+                    comentarios.append(value)
+            return comentarios
+            
         
     def prepareModels(self, xml_file, type):
         comentarios = self.procesar(xml_file, type)
@@ -54,36 +75,67 @@ class Manager(object):
         for i in comentarios:
             train.append(i[0])
         
-        model = VM(train)
+        model = VM(train)        
         vectorModelData = model.prepare_models()
         modelVectorizer = vectorModelData[0]
         modelVectorizerTFIDF = vectorModelData[1]
         modelTFIDF = vectorModelData[2]
         
-        write_data_to_disk(simpleVectorizer, modelVectorizer)
-        write_data_to_disk(tfidfVectorizer, modelVectorizerTFIDF)
-        write_data_to_disk(tfidfModel, modelTFIDF)
+        if type == 1:
+            write_data_to_disk(simpleVectorizer, modelVectorizer)
+            write_data_to_disk(tfidfVectorizer, modelVectorizerTFIDF)
+            write_data_to_disk(tfidfModel, modelTFIDF)
+        else:
+            write_data_to_disk(simpleVectorizerp, modelVectorizer)
+            write_data_to_disk(tfidfVectorizerp, modelVectorizerTFIDF)
+            write_data_to_disk(tfidfModelp, modelTFIDF)
                 
     def trainClassifiers(self, xml_file, type):
         self.prepareModels(xml_file, type)
         comentarios = self.procesar(xml_file, type)
-        data = load_data_from_disk(tfidfModel)
-        data_expanded = []
-        for i in data:
-            vec = expand(i) 
-            data_expanded.append(vec)
-        labels = []
-        for i in comentarios:
-            labels.append(i[1])
-        fileClassifiers = [SVM, NB, ME, DT]
-        for i in range(4):
-            classifier = SC(data_expanded, labels, i+1)
-            fClass = classifier.train()
-            write_data_to_disk(fileClassifiers[i], fClass)
+        
+        if type == 1:        
+            data = load_data_from_disk(tfidfModel)
+            data_expanded = []
+            for i in data:
+                vec = expand(i) 
+                data_expanded.append(vec)
+            labels = []
+            for i in comentarios:
+                labels.append(i[1])
+            fileClassifiers = [SVM, NB, ME, DT]
+        
+            for i in range(4):
+                classifier = SC(data_expanded, labels, i+1)
+                fClass = classifier.train()
+                write_data_to_disk(fileClassifiers[i], fClass)
+        else:
+            data = load_data_from_disk(tfidfModelp)
+            data_expanded = []
+            for i in data:
+                vec = expand(i) 
+                data_expanded.append(vec)
+            labels = []
+            for i in comentarios:
+                labels.append(i[1])
+            fileClassifiers = [SVMp, NBp, MEp, DTp]
+        
+            for i in range(4):
+                classifier = SC(data_expanded, labels, i+1)
+                fClass = classifier.train()
+                write_data_to_disk(fileClassifiers[i], fClass)
+            
     
-    def test(self, comment, type):
-        vectorizer = load_data_from_disk(simpleVectorizer)
-        transformer = load_data_from_disk(tfidfVectorizer)
+    def test(self, comment, type, corpus):
+        vectorizer = []
+        transformer = []
+        if corpus == 1:                
+            vectorizer = load_data_from_disk(simpleVectorizer)
+            transformer = load_data_from_disk(tfidfVectorizer)
+        else:
+            vectorizer = load_data_from_disk(simpleVectorizerp)
+            transformer = load_data_from_disk(tfidfVectorizerp)
+                
         model = VM()
         model.set_models(vectorizer, transformer)
         comentario = comment[0]
@@ -91,14 +143,30 @@ class Manager(object):
         segmentos = seg.find_sentences()
         entities = comment[1].items()
         
+        classSVM = ""
+        classNB = ""
+        classME = ""
+        classDT = ""
+        if corpus == 1:
+            classSVM = SVM
+            classNB = NB
+            classME = ME
+            classDT = DT 
+        else:
+            classSVM = SVMp
+            classNB = NBp
+            classME = MEp
+            classDT = DTp
+        
+        
         if type == 1:
-            return self.__testClassifier(segmentos, entities, model, SVM)                                    
+            return self.__testClassifier(segmentos, entities, model, classSVM)                                    
         elif type == 2:
-            return self.__testClassifier(segmentos, entities, model, NB)
+            return self.__testClassifier(segmentos, entities, model, classNB)
         elif type == 3:
-            return self.__testClassifier(segmentos, entities, model, ME)
+            return self.__testClassifier(segmentos, entities, model, classME)
         elif type == 4:
-            return self.__testClassifier(segmentos, entities, model, DT)        
+            return self.__testClassifier(segmentos, entities, model, classDT)        
         elif type == 5:
             return self.__testUnsup(segmentos, entities)
         
@@ -144,9 +212,10 @@ if __name__ == '__main__':
     #obj.trainClassifiers(corpusTrain1, 1)
     #obj.trainClassifiers(corpusTrain2, 1)
     #obj.trainClassifiers(corpusFinal, 1)
+    obj.trainClassifiers(corpusPeruvianTrain, 2)
     
      
-    
+    '''
     actores = {}
     actores["Barcelona"] = 3
     actores["Madrid"] = 65
@@ -181,4 +250,5 @@ if __name__ == '__main__':
     results = obj.test(comentario4, 5)    
     for i in results:
         print i
+    '''
     

@@ -4,6 +4,9 @@ Created on 14/8/2015
 @author: ucsp
 '''
 
+import elementtree.ElementTree as ET
+from elementtree.ElementTree import ElementTree
+
 xml = "stompol-tweets-train-tagged.xml"
 
 class Reader(object):
@@ -20,6 +23,8 @@ class Reader(object):
             return self.__readType2()
         elif self.__type == 3:
             return self.__readType3()
+        elif self.__type == 4:
+            return self.__readType4()
     
     def __readType1(self):
         arch = open(self.__file, 'r')
@@ -118,6 +123,18 @@ class Reader(object):
                         texto = lines
                         labels.append(texto)
         return labels
+    
+    def __readType4(self):
+        tree = ET.parse(self.__file)
+        root = tree.getroot()
+        comments = []
+        for child in root:
+            texto = child[1].text
+            polaridad = child[2].text
+            value = (texto, polaridad)
+            comments.append(value)
+        return comments 
+
                                     
     
     def getData(self):
@@ -125,14 +142,12 @@ class Reader(object):
 
 if __name__ == '__main__':
     
-    arc = "prueba.txt"
-    obj = Reader(arc, 3)
-    '''
+    arc = "Corpus/peruvianTrain.xml"
+    obj = Reader(arc, 4)
+    
     data = obj.read()
     for i in data:
         print i
-    '''    
-    labels = obj.read()
-    print labels 
+     
         
     
