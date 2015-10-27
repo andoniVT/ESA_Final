@@ -216,18 +216,14 @@ if __name__ == '__main__':
 
     #obj.trainClassifiers(corpusTrain1, 1)
     #obj.trainClassifiers(corpusTrain2, 1)
-    #obj.trainClassifiers(corpusFinal, 1)
-    obj.trainClassifiers(corpusPeruvianTrain, 2)
+    #obj.trainClassifiers(corpusFinal, 1)  # Para entrenar los clasificadores España
+    #obj.trainClassifiers(corpusPeruvianTrain, 2) # Para entrenar de Peru
     
      
-    '''
-=======
+   
     
-    #obj.trainClassifiers(corpusFinal, 1)  # Para entrenar los clasificadores
-    
-     
     # pruebas
->>>>>>> 6f8df8c70e91e56a51fbb260e0a77ade0dd16851
+
     actores = {}
     actores["Barcelona"] = 3
     actores["Madrid"] = 65
@@ -256,11 +252,12 @@ if __name__ == '__main__':
     
     
     
-    results = obj.test(comentario3, 4)    
+    results = obj.test(comentario3, 1 , 2)    
     for i in results:
         print i
-<<<<<<< HEAD
-    '''
+    
+
+
 
     
 
