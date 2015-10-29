@@ -25,6 +25,8 @@ class Reader(object):
             return self.__readType3()
         elif self.__type == 4:
             return self.__readType4()
+        elif self.__type == 5:
+            return self.__readType5()
     
     def __readType1(self):
         arch = open(self.__file, 'r')
@@ -134,6 +136,18 @@ class Reader(object):
             value = (texto, polaridad)
             comments.append(value)
         return comments 
+    
+    def __readType5(self):
+        tree = ET.parse(self.__file)
+        root = tree.getroot()
+        comentarios = []
+        for child in root:
+            contenido = child[1].text 
+            polaridad = child[2].text
+            value = (contenido, polaridad)
+            comentarios.append(value)
+        return comentarios
+            
 
                                     
     
@@ -142,12 +156,15 @@ class Reader(object):
 
 if __name__ == '__main__':
     
-    arc = "Corpus/peruvianTrain.xml"
-    obj = Reader(arc, 4)
+    arc = "Corpus/edu.xml"
+    obj = Reader(arc, 5)
+    
+    
     
     data = obj.read()
     for i in data:
         print i
+    
      
         
     

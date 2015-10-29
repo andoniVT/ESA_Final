@@ -12,7 +12,7 @@ from Test.Utils import write_data_to_disk , load_data_from_disk , expand
 from Test.Classifier import SupervisedClassifier as SC
 from Test.unsupervisedClassifier import Unsupervised
 from Test.segmentation import Segmentation , Segmentation2
-
+from sklearn.metrics import classification_report
 
 
 simpleVectorizer = "Models/simpleVectorizer.pk1"
@@ -206,13 +206,29 @@ class Manager(object):
                     results.append(value)
         return results 
     
+    def test_only_sentiments(self, sentences):
+        y_true = []
+        y_predicted = []
+        for i in sentences:
+            obj = Unsupervised(i[0])
+            result = obj.classify()
+            y_true.append(i[1])
+            y_predicted.append(result) 
+            print i[0] + " " + i[1] + " " + result
+        
+        print classification_report(y_true, y_predicted)   
+    
     
 
 
 if __name__ == '__main__':
     
     
-    obj = Manager()    
+    obj = Manager()
+    reader = Reader("Corpus/edu.xml",5)
+    sentences = reader.read()
+    
+    obj.test_only_sentiments(sentences)
 
     #obj.trainClassifiers(corpusTrain1, 1)
     #obj.trainClassifiers(corpusTrain2, 1)
@@ -223,7 +239,7 @@ if __name__ == '__main__':
    
     
     # pruebas
-
+    '''
     actores = {}
     actores["Barcelona"] = 3
     actores["Madrid"] = 65
@@ -255,6 +271,7 @@ if __name__ == '__main__':
     results = obj.test(comentario3, 1 , 2)    
     for i in results:
         print i
+    '''
     
 
 
